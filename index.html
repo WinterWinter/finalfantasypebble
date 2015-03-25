@@ -144,9 +144,16 @@
 
       //Setup to allow easy adding more options later
       function saveOptions() {
-        var invertSelect = document.getElementById("hero_select_1");
+        var Hero_1 = document.getElementById("hero_select_1");
+        var Hero_2 = document.getElementById("hero_select_2");
+        var Hero_3 = document.getElementById("hero_select_3");
+        var Hero_4 = document.getElementById("hero_select_4");
+        
         var options = {
-          "hero2": invertSelect.options[invertSelect.selectedIndex].value
+          "hero1": Hero_1.options[Hero_1.selectedIndex].value
+          "hero2": Hero_2.options[Hero_2.selectedIndex].value
+          "hero3": Hero_3.options[Hero_3.selectedIndex].value
+          "hero4": Hero_4.options[Hero_4.selectedIndex].value
         }
         
         return options;
