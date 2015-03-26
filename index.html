@@ -126,6 +126,13 @@
 <option value="WhiteMage">White Mage</option>
    </select>
     </p>
+    
+    <p>Bluetooth Indicator
+<select id="bluetooth">
+<option value="Moogle">Moogle</option>
+<option value="Chocobo">Chocobo</option>
+    </select>
+    </p>
 <br>
     <p>
 <fieldset class="ui-grid-a">
@@ -148,12 +155,14 @@
         var Hero_2 = document.getElementById("hero_select_2");
         var Hero_3 = document.getElementById("hero_select_3");
         var Hero_4 = document.getElementById("hero_select_4");
+        var Bluetooth = document.getElementById("bluetooth");
         
         var options = {
           "hero1": Hero_1.options[Hero_1.selectedIndex].value,
           "hero2": Hero_2.options[Hero_2.selectedIndex].value,
           "hero3": Hero_3.options[Hero_3.selectedIndex].value,
-          "hero4": Hero_4.options[Hero_4.selectedIndex].value
+          "hero4": Hero_4.options[Hero_4.selectedIndex].value,
+          "bluetooth": Bluetooth.options[Bluetooth.selectedIndex].value
         }
         
         return options;
