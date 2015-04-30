@@ -15,118 +15,18 @@
     "resources": {
         "media": [
             {
-                "file": "images/Chocobo Bluetooth Indicator.png",
-                "name": "Chocobo_Indicator",
-                "type": "png-trans"
+                "file": "images/PebbleClassicBG.png",
+                "name": "IMAGE_BACKGROUND",
+                "type": "png"
             },
             {
                 "file": "images/Moogle Bluetooth Indicator.png",
                 "name": "Moogle_Indicator",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/Bard.png",
-                "name": "Bard",
                 "type": "png"
             },
             {
-                "file": "images/BlackMage.png",
-                "name": "BlackMage",
-                "type": "png"
-            },
-            {
-                "file": "images/Conjurer.png",
-                "name": "Conjurer",
-                "type": "png"
-            },
-            {
-                "file": "images/Dragoon.png",
-                "name": "Dragoon",
-                "type": "png"
-            },
-            {
-                "file": "images/Fighter.png",
-                "name": "Fighter",
-                "type": "png"
-            },
-            {
-                "file": "images/Geomancer.png",
-                "name": "Geomancer",
-                "type": "png"
-            },
-            {
-                "file": "images/Hunter.png",
-                "name": "Hunter",
-                "type": "png"
-            },
-            {
-                "file": "images/Karateka.png",
-                "name": "Karateka",
-                "type": "png"
-            },
-            {
-                "file": "images/Knight.png",
-                "name": "Knight",
-                "type": "png"
-            },
-            {
-                "file": "images/Monk.png",
-                "name": "Monk",
-                "type": "png"
-            },
-            {
-                "file": "images/MysticKnight.png",
-                "name": "MysticKnight",
-                "type": "png"
-            },
-            {
-                "file": "images/Ninja.png",
-                "name": "Ninja",
-                "type": "png"
-            },
-            {
-                "file": "images/OnionKnight.png",
-                "name": "OnionKnight",
-                "type": "png"
-            },
-            {
-                "file": "images/RedMage.png",
-                "name": "RedMage",
-                "type": "png"
-            },
-            {
-                "file": "images/Sage.png",
-                "name": "Sage",
-                "type": "png"
-            },
-            {
-                "file": "images/Scholar.png",
-                "name": "Scholar",
-                "type": "png"
-            },
-            {
-                "file": "images/Shaman.png",
-                "name": "Shaman",
-                "type": "png"
-            },
-            {
-                "file": "images/Summoner.png",
-                "name": "Summoner",
-                "type": "png"
-            },
-            {
-                "file": "images/Thief.png",
-                "name": "Thief",
-                "type": "png"
-            },
-            {
-                "file": "images/Viking.png",
-                "name": "Viking",
-                "type": "png"
-            },
-            {
-                "file": "images/Warlock.png",
-                "name": "Warlock",
+                "file": "images/Chocobo Bluetooth Indicator.png",
+                "name": "Chocobo_Indicator",
                 "type": "png"
             },
             {
@@ -135,9 +35,109 @@
                 "type": "png"
             },
             {
-                "file": "images/PebbleClassicBG.png",
-                "name": "IMAGE_BACKGROUND",
-                "type": "png-trans"
+                "file": "images/Warlock.png",
+                "name": "Warlock",
+                "type": "png"
+            },
+            {
+                "file": "images/Viking.png",
+                "name": "Viking",
+                "type": "png"
+            },
+            {
+                "file": "images/Thief.png",
+                "name": "Thief",
+                "type": "png"
+            },
+            {
+                "file": "images/Summoner.png",
+                "name": "Summoner",
+                "type": "png"
+            },
+            {
+                "file": "images/Shaman.png",
+                "name": "Shaman",
+                "type": "png"
+            },
+            {
+                "file": "images/Scholar.png",
+                "name": "Scholar",
+                "type": "png"
+            },
+            {
+                "file": "images/Sage.png",
+                "name": "Sage",
+                "type": "png"
+            },
+            {
+                "file": "images/RedMage.png",
+                "name": "RedMage",
+                "type": "png"
+            },
+            {
+                "file": "images/OnionKnight.png",
+                "name": "OnionKnight",
+                "type": "png"
+            },
+            {
+                "file": "images/Ninja.png",
+                "name": "Ninja",
+                "type": "png"
+            },
+            {
+                "file": "images/MysticKnight.png",
+                "name": "MysticKnight",
+                "type": "png"
+            },
+            {
+                "file": "images/Monk.png",
+                "name": "Monk",
+                "type": "png"
+            },
+            {
+                "file": "images/Knight.png",
+                "name": "Knight",
+                "type": "png"
+            },
+            {
+                "file": "images/Karateka.png",
+                "name": "Karateka",
+                "type": "png"
+            },
+            {
+                "file": "images/Hunter.png",
+                "name": "Hunter",
+                "type": "png"
+            },
+            {
+                "file": "images/Geomancer.png",
+                "name": "Geomancer",
+                "type": "png"
+            },
+            {
+                "file": "images/Fighter.png",
+                "name": "Fighter",
+                "type": "png"
+            },
+            {
+                "file": "images/Dragoon.png",
+                "name": "Dragoon",
+                "type": "png"
+            },
+            {
+                "file": "images/Conjurer.png",
+                "name": "Conjurer",
+                "type": "png"
+            },
+            {
+                "file": "images/BlackMage.png",
+                "name": "BlackMage",
+                "type": "png"
+            },
+            {
+                "file": "images/Bard.png",
+                "name": "Bard",
+                "type": "png"
             },
             {
                 "file": "images/Menu.png",
@@ -147,11 +147,15 @@
             }
         ]
     },
-    "sdkVersion": "2",
+    "sdkVersion": "3",
     "shortName": "Final Fantasy Pebble",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
     "uuid": "39559074-7ae4-4ced-aa9e-d3c83165cd3c",
     "versionCode": 3,
-    "versionLabel": "1.2",
+    "versionLabel": "1.3",
     "watchapp": {
         "watchface": true
     }

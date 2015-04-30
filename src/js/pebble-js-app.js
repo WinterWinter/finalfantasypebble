@@ -6,10 +6,9 @@ Pebble.addEventListener("ready",
 
 Pebble.addEventListener("showConfiguration",
   function(e) {
-    //Load the remote config page
-    Pebble.openURL("http://winterwinter.github.io/finalfantasypebble/");
+     Pebble.openURL("http://winterwinter.github.io/finalfantasypebble/"); 
   }
-);
+                         );
 
 Pebble.addEventListener("webviewclosed",
   function(e) {

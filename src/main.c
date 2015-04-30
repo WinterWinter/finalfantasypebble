@@ -7,7 +7,7 @@
   
 #define KEY_BLUETOOTH 9
   
-#define TOTAL_BT_DIGITS 2
+#define TOTAL_BT_DIGITS 1
 static GBitmap *bt_digits_images[TOTAL_BT_DIGITS];
 static BitmapLayer *bt_digits_layers[TOTAL_BT_DIGITS];
   
@@ -67,13 +67,9 @@ uint32_t stepsUpdateInterval = 1; // in seconds;
 // AppMessage Keys
 #define UPDATE_INTERVAL 2
   
-const int BT_WHITE_IMAGE_RESOURCE_IDS[] = {
-  RESOURCE_ID_Moogle_Indicator_WHITE,
-  RESOURCE_ID_Chocobo_Indicator_WHITE};
-
-const int BT_BLACK_IMAGE_RESOURCE_IDS[] = {
- 	RESOURCE_ID_Moogle_Indicator_BLACK,
-  RESOURCE_ID_Chocobo_Indicator_BLACK};
+const int BT_IMAGE_RESOURCE_IDS[] = {
+  RESOURCE_ID_Moogle_Indicator,
+  RESOURCE_ID_Chocobo_Indicator};
 
 const int HERO_IMAGE_RESOURCE_IDS[] = {
 RESOURCE_ID_Bard,
@@ -104,18 +100,24 @@ RESOURCE_ID_WhiteMage
 //Bitmap Container
 static void set_container_image(GBitmap **bmp_image, BitmapLayer *bmp_layer, const int resource_id, GPoint origin) {
   GBitmap *old_image = *bmp_image;
+  
+     if (old_image != NULL) {
+ 	gbitmap_destroy(old_image);
+}
 
  	*bmp_image = gbitmap_create_with_resource(resource_id);
  	GRect frame = (GRect) {
    	.origin = origin,
-   	.size = (*bmp_image)->bounds.size
+    
+      #ifdef PBL_COLOR
+    .size = gbitmap_get_bounds(*bmp_image).size 
+#else
+     .size = (*bmp_image)->bounds.size 
+#endif
+        
 };
  	bitmap_layer_set_bitmap(bmp_layer, *bmp_image);
- 	layer_set_frame(bitmap_layer_get_layer(bmp_layer), frame);
-
-    if (old_image != NULL) {
- 	gbitmap_destroy(old_image);
-}
+ 	layer_set_frame(bitmap_layer_get_layer(bmp_layer), frame); 
 }
   
 static void handle_battery(BatteryChargeState charge_state) {
@@ -140,12 +142,10 @@ if (connected) {
 // Normal Mode 
 if (initiate_watchface) {
    	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), true);
-   	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), true);
 }
 // On disconnection vibrate twice
 else {
     layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), true);
-   	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), true);
 vibes_double_pulse();
 }
 }
@@ -154,21 +154,13 @@ else {
 // If started in disconnection display Moogle, no vibration
 if (initiate_watchface) {
   layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), false);
-bitmap_layer_set_compositing_mode(bt_digits_layers[0], GCompOpOr);
-set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_WHITE_IMAGE_RESOURCE_IDS[0], GPoint(114, 117));
-  layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), false);
-    bitmap_layer_set_compositing_mode(bt_digits_layers[1], GCompOpClear);
-set_container_image(&bt_digits_images[1], bt_digits_layers[1], BT_BLACK_IMAGE_RESOURCE_IDS[0], GPoint(114, 117));
+set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_IMAGE_RESOURCE_IDS[0], GPoint(114, 117)); 
 }
   
 // On disconnection display Moogle and vibrate three times
 else {
   layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), false);
-bitmap_layer_set_compositing_mode(bt_digits_layers[0], GCompOpOr);
-set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_WHITE_IMAGE_RESOURCE_IDS[0], GPoint(114, 117));
-  layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), false);
-    bitmap_layer_set_compositing_mode(bt_digits_layers[1], GCompOpClear);
-set_container_image(&bt_digits_images[1], bt_digits_layers[1], BT_BLACK_IMAGE_RESOURCE_IDS[0], GPoint(114, 117));
+set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_IMAGE_RESOURCE_IDS[0], GPoint(114, 117));
 
 vibes_enqueue_custom_pattern( (VibePattern) {
    	.durations = (uint32_t []) {100, 100, 100, 100, 100},
@@ -182,12 +174,10 @@ vibes_enqueue_custom_pattern( (VibePattern) {
 // Normal Mode 
 if (initiate_watchface) {
    	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), true);
-   	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), true);
 }
 // On disconnection vibrate twice
 else {
     layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), true);
-   	layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), true);
 vibes_double_pulse();
 }
 }
@@ -196,21 +186,13 @@ else {
 // If started in disconnection display Moogle, no vibration
 if (initiate_watchface) {
   layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), false);
-bitmap_layer_set_compositing_mode(bt_digits_layers[0], GCompOpOr);
-set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_WHITE_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
-  layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), false);
-    bitmap_layer_set_compositing_mode(bt_digits_layers[1], GCompOpClear);
-set_container_image(&bt_digits_images[1], bt_digits_layers[1], BT_BLACK_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
+set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
 }
   
 // On disconnection display Moogle and vibrate three times
 else {
   layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[0]), false);
-bitmap_layer_set_compositing_mode(bt_digits_layers[0], GCompOpOr);
-set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_WHITE_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
-  layer_set_hidden(bitmap_layer_get_layer(bt_digits_layers[1]), false);
-    bitmap_layer_set_compositing_mode(bt_digits_layers[1], GCompOpClear);
-set_container_image(&bt_digits_images[1], bt_digits_layers[1], BT_BLACK_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
+set_container_image(&bt_digits_images[0], bt_digits_layers[0], BT_IMAGE_RESOURCE_IDS[1], GPoint(114, 117));
 
 vibes_enqueue_custom_pattern( (VibePattern) {
    	.durations = (uint32_t []) {100, 100, 100, 100, 100},
@@ -264,449 +246,17 @@ static void update_level() {
 static void window_load(Window *me) {
   
   window_set_background_color(me, GColorBlack);
-  
-   // Background image
-	s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND_WHITE);
-	s_background_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
-  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
-  bitmap_layer_set_compositing_mode(s_background_layer, GCompOpOr);
-	layer_add_child(window_get_root_layer(me), bitmap_layer_get_layer(s_background_layer));
-  
+ 
   //Check for saved option
   int hero1 = persist_read_int(KEY_HERO1);
   int hero2 = persist_read_int(KEY_HERO2);
   int hero3 = persist_read_int(KEY_HERO3);
   int hero4 = persist_read_int(KEY_HERO4);
 
-
-  //Hero1========================================================================================================
-  if(hero1 == 0)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[0], GPoint(5, 15)); 
-  }
-  else if(hero1 == 1)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[1], GPoint(5, 15)); 
-  }
-  else if(hero1 == 2)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[2], GPoint(5, 15)); 
-  }
-  else if(hero1 == 3)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[3], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 4)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[4], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 5)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[5], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 6)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[6], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 7)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[7], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 8)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[8], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 9)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[9], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 10)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[10], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 11)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[11], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 12)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[12], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 13)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[13], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 14)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[14], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 15)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[15], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 16)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[16], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 17)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[17], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 18)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[18], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 19)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[19], GPoint(5, 15)); 
-  }
-  else if(hero1 == 20)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[20], GPoint(5, 15)); 
-  }
-
-  else if(hero1 == 21)
-  {
-   set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[21], GPoint(5, 15)); 
-  }
-  
-  //Hero2=========================================================================================================
- if(hero2 == 0)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[0], GPoint(5, 53)); 
-  }
-  else if(hero2 == 1)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[1], GPoint(5, 53)); 
-  }
-  else if(hero2 == 2)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[2], GPoint(5, 53)); 
-  }
-  else if(hero2 == 3)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[3], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 4)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[4], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 5)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[5], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 6)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[6], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 7)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[7], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 8)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[8], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 9)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[9], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 10)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[10], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 11)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[11], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 12)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[12], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 13)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[13], GPoint(5, 53)); 
-  }
-  else if(hero2 == 14)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[14], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 15)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[15], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 16)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[16], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 17)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[17], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 18)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[18], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 19)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[19], GPoint(5, 53)); 
-  }
-  else if(hero2 == 20)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[20], GPoint(5, 53)); 
-  }
-
-  else if(hero2 == 21)
-  {
-   set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[21], GPoint(5, 53)); 
-  }
-  
-  //HERO3==========================================================================================================
-
-  if(hero3 == 0)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[0], GPoint(5, 93)); 
-  }
-  else if(hero3 == 1)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[1], GPoint(5, 93)); 
-  }
-  else if(hero3 == 2)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[2], GPoint(5, 93)); 
-  }
-  else if(hero3 == 3)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[3], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 4)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[4], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 5)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[5], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 6)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[6], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 7)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[7], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 8)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[8], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 9)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[9], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 10)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[10], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 11)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[11], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 12)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[12], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 13)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[13], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 14)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[14], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 15)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[15], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 16)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[16], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 17)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[17], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 18)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[18], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 19)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[19], GPoint(5, 93)); 
-  }
-  else if(hero3 == 20)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[20], GPoint(5, 93)); 
-  }
-
-  else if(hero3 == 21)
-  {
-   set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[21], GPoint(5, 93)); 
-  }
-  
-  //Hero4==========================================================================================================
-
-  if(hero4 == 0)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[0], GPoint(5, 132)); 
-  }
-  else if(hero4 == 1)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[1], GPoint(5, 132)); 
-  }
-  else if(hero4 == 2)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[2], GPoint(5, 132)); 
-  }
-  else if(hero4 == 3)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[3], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 4)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[4], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 5)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[5], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 6)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[6], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 7)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[7], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 8)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[8], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 9)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[9], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 10)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[10], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 11)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[11], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 12)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[12], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 13)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[13], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 14)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[14], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 15)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[15], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 16)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[16], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 17)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[17], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 18)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[18], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 19)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[19], GPoint(5, 132)); 
-  }
-  else if(hero4 == 20)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[20], GPoint(5, 132)); 
-  }
-
-  else if(hero4 == 21)
-  {
-   set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[21], GPoint(5, 132)); 
-  }
+  set_container_image(&hero_digits_images[1], hero_digits_layers[1], HERO_IMAGE_RESOURCE_IDS[hero1], GPoint(5, 15)); 
+  set_container_image(&hero_digits_images[2], hero_digits_layers[2], HERO_IMAGE_RESOURCE_IDS[hero2], GPoint(5, 53)); 
+  set_container_image(&hero_digits_images[3], hero_digits_layers[3], HERO_IMAGE_RESOURCE_IDS[hero3], GPoint(5, 93)); 
+  set_container_image(&hero_digits_images[4], hero_digits_layers[4], HERO_IMAGE_RESOURCE_IDS[hero4], GPoint(5, 132)); 
   
   // Create time TextLayer
   s_time_layer = text_layer_create(GRect(40, 135, 139, 50));
@@ -1349,6 +899,12 @@ void init() {
   level = persist_exists(NUM_LEVEL_PKEY) ? persist_read_int(NUM_LEVEL_PKEY) : NUM_LEVEL_DEFAULT;
   
   Layer *window_layer = window_get_root_layer(s_main_window);
+  
+  // Background image
+	s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+	s_background_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
+  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+	layer_add_child(window_get_root_layer(s_main_window), bitmap_layer_get_layer(s_background_layer));
   
   GRect dummy_frame = { {0, 0}, {0, 0} };
   
