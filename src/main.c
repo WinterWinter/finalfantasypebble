@@ -7,6 +7,11 @@
   
 #define KEY_BLUETOOTH 9
   
+#define KEY_DIFFICULTY 10
+#define KEY_SENSITIVITY 11
+#define KEY_RESET 12
+#define KEY_CHALLENGE 13
+  
 #define TOTAL_BT_DIGITS 1
 static GBitmap *bt_digits_images[TOTAL_BT_DIGITS];
 static BitmapLayer *bt_digits_layers[TOTAL_BT_DIGITS];
@@ -42,10 +47,10 @@ static TextLayer *lvl_layer;
 const int PED_ADJUST = 2;
 
 // Less increases sensitivity
-int X_DELTA = 35; 
-int Y_DELTA, Z_DELTA = 185;
-int YZ_DELTA_MIN = 175;
-int YZ_DELTA_MAX = 195; 
+int X_DELTA; 
+int Y_DELTA, Z_DELTA;
+int YZ_DELTA_MIN;
+int YZ_DELTA_MAX; 
 
 
 int X_DELTA_TEMP, Y_DELTA_TEMP, Z_DELTA_TEMP = 0;
@@ -95,6 +100,8 @@ RESOURCE_ID_Viking,
 RESOURCE_ID_Warlock, 
 RESOURCE_ID_WhiteMage
 };
+
+
 
 
 //Bitmap Container
@@ -203,6 +210,47 @@ vibes_enqueue_custom_pattern( (VibePattern) {
     
   }
 
+}
+
+static void update_challenge(struct tm *current_time) {
+  
+  static char buf[] = "123456890abcdefghijkl";
+  static char lvl_text[] = "123";
+  
+  int challenge = persist_read_int(KEY_CHALLENGE);
+  
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Reset is [%d].", challenge);
+  
+if (current_time->tm_hour == 0 && current_time->tm_min == 0 && current_time->tm_sec == 0 && challenge == 1 ){
+    //Daily
+       level = 1;
+       pedometerCount = 1;
+  		 snprintf(buf, sizeof(buf), "%ld", pedometerCount);
+       text_layer_set_text(steps_layer, buf);
+       snprintf(lvl_text, sizeof(lvl_text), "%u", level);
+       text_layer_set_text(lvl_layer, lvl_text);
+  } 
+  else if (current_time->tm_hour == 0 && current_time->tm_min == 0 && current_time->tm_sec == 0 && current_time->tm_wday == 0 && challenge == 2){
+   //Weekly
+       level = 1;
+       pedometerCount = 1;
+  		 snprintf(buf, sizeof(buf), "%ld", pedometerCount);
+       text_layer_set_text(steps_layer, buf);
+       snprintf(lvl_text, sizeof(lvl_text), "%u", level);
+       text_layer_set_text(lvl_layer, lvl_text);
+  } 
+  else if (current_time->tm_hour == 0 && current_time->tm_min == 0 && current_time->tm_sec == 0 && current_time->tm_mday == 1 && challenge == 3){
+    //Monthly
+       level = 1;
+       pedometerCount = 1;
+  		 snprintf(buf, sizeof(buf), "%ld", pedometerCount);
+       text_layer_set_text(steps_layer, buf);
+       snprintf(lvl_text, sizeof(lvl_text), "%u", level);
+       text_layer_set_text(lvl_layer, lvl_text);
+  } 
+  else {
+    //Off
+  }
 }
 
   
@@ -323,6 +371,7 @@ static void window_unload(Window *window) {
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
+  update_challenge(tick_time);
   if(units_changed & SECOND_UNIT){
     secondsTillStepsUpdate++;
   }
@@ -330,6 +379,10 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 static void in_recv_handler(DictionaryIterator *iterator, void *context)
 {
+  
+  static char buf[] = "123456890abcdefghijkl";
+  static char lvl_text[] = "123";
+  
   //Get Tuple
   Tuple *t = dict_read_first(iterator);
   while(t != NULL)
@@ -882,6 +935,102 @@ static void in_recv_handler(DictionaryIterator *iterator, void *context)
       {
          persist_write_int(KEY_BLUETOOTH, 1);
       }
+      
+      case KEY_SENSITIVITY:
+      
+      if(strcmp(t->value->cstring, "high") == 0)
+      {
+        X_DELTA = 25;
+		    Y_DELTA = 110;
+		    Z_DELTA = 110;
+		    YZ_DELTA_MIN = 100;
+		    YZ_DELTA_MAX = 120; 
+
+        persist_write_int(KEY_SENSITIVITY, 0);
+      }
+      
+      else if(strcmp(t->value->cstring, "medium") == 0)
+      {
+        X_DELTA = 35;
+		    Y_DELTA = 185;
+		    Z_DELTA = 185;
+		    YZ_DELTA_MIN = 175;
+		    YZ_DELTA_MAX = 195; 
+
+        persist_write_int(KEY_SENSITIVITY, 1);
+      }
+      
+      else if(strcmp(t->value->cstring, "low") == 0)
+      {
+        	X_DELTA = 45;
+		      Y_DELTA = 235;
+		      Z_DELTA = 235;
+		      YZ_DELTA_MIN = 225;
+		      YZ_DELTA_MAX = 245; 
+
+        persist_write_int(KEY_SENSITIVITY, 2);
+      }
+      
+      case KEY_DIFFICULTY:
+      
+      if(strcmp(t->value->cstring, "easy") == 0)
+      {
+        persist_write_int(KEY_DIFFICULTY, 500);
+      }
+      
+      else if(strcmp(t->value->cstring, "normal") == 0)
+      {
+       persist_write_int(KEY_DIFFICULTY, 2000);
+      }
+      
+      else if(strcmp(t->value->cstring, "hard") == 0)
+      {
+        persist_write_int(KEY_DIFFICULTY, 5000);
+      }
+      
+      else if(strcmp(t->value->cstring, "insane") == 0)
+      {
+        persist_write_int(KEY_DIFFICULTY, 10000);
+      }
+      
+      case KEY_CHALLENGE:
+      
+      if(strcmp(t->value->cstring, "off") == 0)
+      {
+        persist_write_int(KEY_CHALLENGE, 0);
+      }
+      
+      else if(strcmp(t->value->cstring, "daily") == 0)
+      {
+       persist_write_int(KEY_CHALLENGE, 1);
+      }
+      
+      else if(strcmp(t->value->cstring, "weekly") == 0)
+      {
+       persist_write_int(KEY_CHALLENGE, 2);
+      }
+      
+      else  if(strcmp(t->value->cstring, "monthly") == 0)
+      {
+      persist_write_int(KEY_CHALLENGE, 3);
+      }  
+      
+       case KEY_RESET:
+      
+      if(strcmp(t->value->cstring, "no") == 0)
+      {
+      }
+      
+     else if(strcmp(t->value->cstring, "yes") == 0)
+      {
+       level = 1;
+       pedometerCount = 1;
+  		 snprintf(buf, sizeof(buf), "%ld", pedometerCount);
+       text_layer_set_text(steps_layer, buf);
+       snprintf(lvl_text, sizeof(lvl_text), "%u", level);
+       text_layer_set_text(lvl_layer, lvl_text);
+      }
+      
             }
         // Look for next item
          t = dict_read_next(iterator);
@@ -897,7 +1046,32 @@ void init() {
   });
   
   level = persist_exists(NUM_LEVEL_PKEY) ? persist_read_int(NUM_LEVEL_PKEY) : NUM_LEVEL_DEFAULT;
+  int sensitivity = persist_read_int(KEY_SENSITIVITY);
   
+  if (sensitivity == 0){
+        X_DELTA = 25;
+		    Y_DELTA = 110;
+		    Z_DELTA = 110;
+		    YZ_DELTA_MIN = 100;
+		    YZ_DELTA_MAX = 120; 
+  }
+  else if(sensitivity == 1){
+        X_DELTA = 35;
+		    Y_DELTA = 185;
+		    Z_DELTA = 185;
+		    YZ_DELTA_MIN = 175;
+		    YZ_DELTA_MAX = 195; 
+  }
+    else if(sensitivity == 2){
+          X_DELTA = 45;
+		      Y_DELTA = 235;
+		      Z_DELTA = 235;
+		      YZ_DELTA_MIN = 225;
+		      YZ_DELTA_MAX = 245; 
+    }
+  
+
+    
   Layer *window_layer = window_get_root_layer(s_main_window);
   
   // Background image
@@ -926,10 +1100,16 @@ void init() {
    initiate_watchface = false;
   
    // Register with TickTimerService
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   
   // Window
   window_stack_push(s_main_window, true /* Animated */);
+  
+  // Avoids a blank screen on watch start.
+ 	time_t now = time(NULL);
+ 	struct tm *tick_time = localtime(&now);
+  
+  update_challenge(tick_time);
 }
 
 
@@ -1000,6 +1180,9 @@ void resetUpdate() {
 }
 
 void update_ui_callback() {
+  
+int  level_up = persist_read_int(KEY_DIFFICULTY);
+  
 	if ((validX && validY && !did_pebble_vibrate) || (validX && validZ && !did_pebble_vibrate)) {
 		pedometerCount++;
 
@@ -1013,7 +1196,7 @@ void update_ui_callback() {
       lastPedometerCount = pedometerCount;
     }
 
-	if (pedometerCount % 2000 == 0) {
+	if (pedometerCount % level_up == 0) {
     level++;
     update_level();
   }

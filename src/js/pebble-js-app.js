@@ -6,7 +6,7 @@ Pebble.addEventListener("ready",
 
 Pebble.addEventListener("showConfiguration",
   function(e) {
-     Pebble.openURL("http://winterwinter.github.io/finalfantasypebble/"); 
+    Pebble.openURL("http://winterwinter.github.io/finalfantasypebble/"); 
   }
                          );
 
@@ -21,7 +21,11 @@ Pebble.addEventListener("webviewclosed",
       "KEY_HERO2" : Heroes.hero2,
       "KEY_HERO3" : Heroes.hero3,
       "KEY_HERO4" : Heroes.hero4,
-      "KEY_BLUETOOTH" : Heroes.bluetooth
+      "KEY_BLUETOOTH" : Heroes.bluetooth,
+      "KEY_SENSITIVITY" : Heroes.sensitivity,
+      "KEY_DIFFICULTY" : Heroes.difficulty,
+      "KEY_CHALLENGE" : Heroes.challenge,
+      "KEY_RESET" : Heroes.reset
        };
 
     //Send to Pebble, persist there
