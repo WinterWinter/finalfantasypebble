@@ -2,16 +2,16 @@
 <html>
   <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <title>Final Fantasy Pebble</title>
+    <title>Final Fantasy GT</title>
   </head>
   <body>
 
 <div data-role="page">
   <div data-role="header"  data-theme="b">
-  <h1>Selection Screen</h1>
+  <h1>Settings</h1>
   </div>
 
 
@@ -129,10 +129,44 @@
     
     <p>Bluetooth Indicator
 <select id="bluetooth">
-<option value="Moogle">Moogle</option>
-<option value="Chocobo">Chocobo</option>
+<option value="chocobo">Chocobo</option>
+<option value="moogle">Moogle</option>
+    </select>
+    </p>   
+    
+       <p>Sensitivity
+<select id="sensitivity">
+<option value="low">Low</option>
+<option value="medium">Medium</option>
+<option value="high">High</option>
     </select>
     </p>
+    
+       <p>Difficulty Mode
+<select id="difficulty">
+<option value="easy">Easy</option>
+<option value="normal">Normal</option>
+<option value="hard">Hard</option>
+<option value="insane">Insane</option>
+    </select>
+    </p>
+    
+      <p> Auto Reset
+<select id="challenge">
+<option value="off">Off</option>
+<option value="daily">Daily</option>
+<option value="weekly">Weekly</option>
+<option value="monthly">Monthly</option>
+    </select>
+    </p>
+    
+       <p>Reset Level and Experience
+<select id="reset">
+<option value="no">No</option>
+<option value="yes">Yes</option>
+    </select>
+    </p>   
+    
 <br>
     <p>
 <fieldset class="ui-grid-a">
@@ -168,7 +202,6 @@
             console.log("Cancel");
             document.location = "pebblejs://close";
         });
-
       //Setup to allow easy adding more options later
       function saveOptions() {
         var Hero_1 = document.getElementById("hero_select_1");
@@ -176,13 +209,22 @@
         var Hero_3 = document.getElementById("hero_select_3");
         var Hero_4 = document.getElementById("hero_select_4");
         var Bluetooth = document.getElementById("bluetooth");
+        var Sensitivity = document.getElementById("sensitivity");
+        var Difficulty = document.getElementById("difficulty");
+        var Challenge = document.getElementById("challenge");
+        var Reset = document.getElementById("reset");
         
         var options = {
           "hero1": Hero_1.options[Hero_1.selectedIndex].value,
           "hero2": Hero_2.options[Hero_2.selectedIndex].value,
           "hero3": Hero_3.options[Hero_3.selectedIndex].value,
           "hero4": Hero_4.options[Hero_4.selectedIndex].value,
-          "bluetooth": Bluetooth.options[Bluetooth.selectedIndex].value
+          "bluetooth": Bluetooth.options[Bluetooth.selectedIndex].value,
+          "sensitivity": Sensitivity.options[Sensitivity.selectedIndex].value,
+          "difficulty": Difficulty.options[Difficulty.selectedIndex].value,
+          "reset": Reset.options[Reset.selectedIndex].value,
+          "challenge": Challenge.options[Challenge.selectedIndex].value
+          
         }
         
         return options;
